@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ASPNETCoreScheduler.Scheduler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,10 @@ namespace ASPNETCoreScheduler
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<IHostedService, ScheduleTask>();
+            // Add our Config object so it can be injected
+            services.Configure<ScheduleTaskSettings>(Configuration.GetSection(nameof(ScheduleTaskSettings)));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

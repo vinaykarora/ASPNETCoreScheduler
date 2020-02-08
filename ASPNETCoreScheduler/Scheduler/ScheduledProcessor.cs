@@ -1,5 +1,6 @@
 ﻿using ASPNETCoreScheduler.BackgroundService;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NCrontab;
 using System;
 using System.Threading;
@@ -12,8 +13,10 @@ namespace ASPNETCoreScheduler.Scheduler
         private CrontabSchedule _schedule;
         private DateTime _nextRun;
         protected abstract string Schedule { get; }
-        public ScheduledProcessor(IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
+        protected readonly ScheduleTaskSettings Settings;
+        public ScheduledProcessor(IServiceScopeFactory serviceScopeFactory, IOptions<ScheduleTaskSettings> settings) : base(serviceScopeFactory)
         {
+            Settings = settings.Value;
             _schedule = CrontabSchedule.Parse(Schedule);
             _nextRun = _schedule.GetNextOccurrence(DateTime.Now);
         }

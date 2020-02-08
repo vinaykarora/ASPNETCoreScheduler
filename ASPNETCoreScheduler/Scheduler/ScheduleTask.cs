@@ -1,19 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASPNETCoreScheduler.Scheduler
 {
     public class ScheduleTask : ScheduledProcessor
     {
-
-        public ScheduleTask(IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory)
+        public ScheduleTask(IServiceScopeFactory serviceScopeFactory,
+            IOptions<ScheduleTaskSettings> settings) : base(serviceScopeFactory, settings)
         {
+          
         }
 
-        protected override string Schedule => "*/10 * * * *";
+        protected override string Schedule => Settings.PrimaryOrderTaskSchedule;
 
         public override Task ProcessInScope(IServiceProvider serviceProvider)
         {
